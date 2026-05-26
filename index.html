@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO -->
+  <title>Snowy Cats | Mobile Game</title>
+  <meta name="description" content="Snowy Cats is an exciting 2D pixel art mobile game with adorable cats and snowy mountains in the Endless Runner Platformer genre. Download for free!">
+  <meta name="keywords" content="snowy cats, cats, pixel cats, 2d platformer, endless runner, pixel game, mobile game, pixel art, download game">
+  <meta name="author" content="Red Pixels">
+
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Snowy Cats | Mobile Game">
+  <meta property="og:description" content="Exciting 2D pixel game with cats in the genre Endless Runner Platformer">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://redpixels.io">
+  <meta property="og:image" content="images/banner-site.png">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Snowy Cats | Mobile Game">
+  <meta name="twitter:description" content="Exciting 2D pixel game with cats in the genre Endless Runner Platformer">
+  <meta name="twitter:image" content="images/banner-site.png">
+
+  <!-- Multilanguage -->
+  <link rel="alternate" hreflang="en" href="https://redpixels.io">
+  <link rel="alternate" hreflang="ru" href="https://redpixels.io/?lang=ru">
+  <link rel="alternate" hreflang="x-default" href="https://redpixels.io">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/icons/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
+  <link rel="shortcut icon" href="/icons/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-title" content="Snowy Cats">
+  <link rel="manifest" href="/icons/site.webmanifest">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- SNOWFLAKES -->
+  <div id="snowflakes" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════ -->
+  <header class="header">
+    <a href="#" class="logo">
+      <svg class="logo-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+        <rect width="16" height="16" fill="#4FC3F7"/>
+        <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+        <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+        <rect x="3" y="2" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="11" y="2" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="3" y="5" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="11" y="5" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="4" y="4" width="1" height="1" fill="#FF8C2B"/>
+        <rect x="11" y="4" width="1" height="1" fill="#FF8C2B"/>
+        <rect x="3" y="6" width="10" height="6" fill="#FFFFFF"/>
+        <rect x="2" y="6" width="1" height="6" fill="#1A1A1A"/>
+        <rect x="13" y="6" width="1" height="6" fill="#1A1A1A"/>
+        <rect x="3" y="12" width="10" height="1" fill="#1A1A1A"/>
+        <rect x="3" y="5" width="10" height="1" fill="#FFFFFF"/>
+        <rect x="5" y="8" width="2" height="2" fill="#1A1A1A"/>
+        <rect x="9" y="8" width="2" height="2" fill="#1A1A1A"/>
+        <rect x="6" y="8" width="1" height="1" fill="#4FC3F7"/>
+        <rect x="10" y="8" width="1" height="1" fill="#4FC3F7"/>
+        <rect x="7" y="10" width="2" height="1" fill="#FF8C2B"/>
+        <rect x="6" y="11" width="1" height="1" fill="#1A1A1A"/>
+        <rect x="9" y="11" width="1" height="1" fill="#1A1A1A"/>
+      </svg>
+      <span class="logo-text">SNOWY <span class="accent">CATS</span></span>
+    </a>
+
+    <nav class="nav-actions" id="navActions">
+      <div class="header-btns">
+        <a href="#download" class="btn btn-blue play-sound" aria-label="App Store">
+          <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+          </svg>
+          <span class="btn-text-stack">
+            <small data-i18n="appStoreSmall">Download on</small>
+            <span>APP STORE</span>
+          </span>
+        </a>
+        <a href="#download" class="btn btn-orange play-sound" aria-label="Google Play">
+          <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+          </svg>
+          <span class="btn-text-stack">
+            <small data-i18n="googlePlaySmall">Get it on</small>
+            <span>GOOGLE PLAY</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="lang-switch">
+        <button class="lang-btn active play-sound" data-lang="en">EN</button>
+        <button class="lang-btn play-sound" data-lang="ru">RU</button>
+      </div>
+    </nav>
+
+    <button class="hamburger play-sound" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <!-- ════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════ -->
+    <section class="hero" id="about">
+      <div class="platform platform-1"></div>
+      <div class="platform platform-2"></div>
+
+      <div class="hero-content">
+        <div class="hero-text">
+          <img src="images/400x100.gif" alt="Snowy Cats" class="hero-logo">
+          <h1 class="hero-title" data-i18n="heroTitle">SNOWY CATS</h1>
+          <p class="hero-subtitle" data-i18n="heroSubtitle">An adorable pixel cat. Endless snowy mountains. Collect cats, earn coins, and race to the top!</p>
+          <div class="hero-buttons">
+            <a href="#download" class="btn btn-blue btn-large play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+                <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+              </svg>
+              <span class="btn-text-stack">
+                <small data-i18n="appStoreSmall">Download on</small>
+                <span>APP STORE</span>
+              </span>
+            </a>
+            <a href="#download" class="btn btn-orange btn-large play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+              </svg>
+              <span class="btn-text-stack">
+                <small data-i18n="googlePlaySmall">Get it on</small>
+                <span>GOOGLE PLAY</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual">
+          <div class="hero-visual-frame">
+            <img src="images/500x400.gif" alt="Snowy Cats Gameplay">
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-ground"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         ABOUT
+    ════════════════════════════════════════ -->
+    <section id="about-game" class="about">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="aboutTitle">ABOUT THE GAME</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p data-i18n="aboutP1">Meet your cat — a brave little pixel feline scaling endless snowy peaks. Leap over obstacles, collect sparkling coins and unlock an entire wardrobe of adorable hats and costumes!</p>
+            <p data-i18n="aboutP2">Snowy Cats is a pixel art endless runner platformer where you guide your cat through beautiful snow-covered mountains. Simple controls, satisfying progress, and a whole lot of charm.</p>
+            <p data-i18n="aboutP3">Currently in active development. Coming soon to App Store and Google Play!</p>
+          </div>
+          <div class="about-illustration">
+            <!-- Pixel scene: cat on snowy platform with mountains -->
+            <svg viewBox="0 0 64 64" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect width="64" height="40" fill="#4FC3F7"/>
+              <rect x="8" y="6" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="20" y="4" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="40" y="8" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="55" y="5" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="48" y="14" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="12" y="18" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="32" y="22" width="1" height="1" fill="#FFFFFF"/>
+              <path fill="#0288D1" d="M0 28h2v-1h2v-2h2v-3h2v-2h2v3h2v2h2v1h2v2H0zM20 30h2v-2h2v-3h2v-2h2v-1h2v3h2v2h2v3H20zM40 28h2v-3h2v-2h2v-2h2v-1h2v2h2v2h2v2h2v2H40zM58 30h2v-2h2v-1h2v3h-6z"/>
+              <rect x="6" y="22" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="26" y="22" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="48" y="21" width="2" height="2" fill="#FFFFFF"/>
+              <rect y="40" width="64" height="24" fill="#FFFFFF"/>
+              <rect y="40" width="64" height="1" fill="#1A1A1A"/>
+              <rect x="20" y="44" width="20" height="3" fill="#FF8C2B"/>
+              <rect x="20" y="43" width="20" height="1" fill="#1A1A1A"/>
+              <rect x="20" y="47" width="20" height="1" fill="#E65100"/>
+              <rect x="48" y="32" width="2" height="8" fill="#1A1A1A"/>
+              <rect x="46" y="34" width="6" height="4" fill="#1A1A1A"/>
+              <rect x="46" y="32" width="6" height="2" fill="#FFFFFF"/>
+              <rect x="44" y="36" width="10" height="2" fill="#1A1A1A"/>
+              <rect x="44" y="36" width="10" height="1" fill="#FFFFFF"/>
+              <rect x="26" y="40" width="6" height="4" fill="#FFFFFF"/>
+              <rect x="26" y="39" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="31" y="39" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="27" y="41" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="30" y="41" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="28" y="42" width="2" height="1" fill="#FF8C2B"/>
+              <rect x="14" y="10" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="36" y="14" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="52" y="20" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="28" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="60" y="32" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         FEATURES
+    ════════════════════════════════════════ -->
+    <section id="features" class="features">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="featuresTitle">FEATURES</h2>
+        <div class="features-grid">
+
+          <article class="feature-card">
+            <div class="feature-icon-img">
+              <img src="images/catty.png" alt="">
+            </div>
+            <h3 data-i18n="feature1Title">30+ CATS</h3>
+            <p data-i18n="feature1Desc">Collect over 30 unique pixel cats, each with their own special style and look.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-img">
+              <img src="images/mount.png" alt="">
+            </div>
+            <h3 data-i18n="feature2Title">SNOWY MOUNTAINS</h3>
+            <p data-i18n="feature2Desc">Explore beautiful pixel landscapes with dynamic day and night cycles.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-img">
+              <img src="images/controller.png" alt="">
+            </div>
+            <h3 data-i18n="feature3Title">ENDLESS RUNNER</h3>
+            <p data-i18n="feature3Desc">Overcome obstacles, collect coins and climb higher and higher every run!</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-img">
+              <img src="images/hat.png" alt="">
+            </div>
+            <h3 data-i18n="feature4Title">SKINS SHOP</h3>
+            <p data-i18n="feature4Desc">Dress your cat with 50+ funny hats, snowboards and other cool effects.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         SCREENSHOTS
+    ════════════════════════════════════════ -->
+    <section id="screenshots" class="screenshots">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="screenshotsTitle">SCREENSHOTS</h2>
+        <div class="screenshots-grid">
+
+          <div class="screenshot">
+            <img src="images/screen_1.png" alt="Snowy Cats Screenshot 1" loading="lazy">
+          </div>
+          <div class="screenshot">
+            <img src="images/300x500.jpg" alt="Snowy Cats Screenshot 2" loading="lazy">
+          </div>
+          <div class="screenshot">
+            <img src="images/300x500.jpg" alt="Snowy Cats Screenshot 3" loading="lazy">
+          </div>
+          <div class="screenshot">
+            <img src="images/300x500.jpg" alt="Snowy Cats Screenshot 4" loading="lazy">
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         DEV / SOCIAL SECTION
+    ════════════════════════════════════════ -->
+    <section class="dev-section">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="devTitle">GAME IN DEVELOPMENT</h2>
+        <p data-i18n="devText">We're working hard to make Snowy Cats as fun and engaging as possible. Coming soon to App Store and Google Play!</p>
+        <p data-i18n="devSocial">We also plan to help street animals! Follow us on social media for updates:</p>
+
+        <div class="social-icons">
+          <!-- YouTube -->
+          <a href="#" class="social-icon play-sound" aria-label="YouTube">
+            <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="4" width="12" height="8" fill="#FFFFFF"/>
+              <rect x="6" y="6" width="1" height="4" fill="#FF8C2B"/>
+              <rect x="7" y="6" width="1" height="4" fill="#FF8C2B"/>
+              <rect x="8" y="7" width="1" height="2" fill="#FF8C2B"/>
+              <rect x="9" y="7" width="1" height="2" fill="#FF8C2B"/>
+            </svg>
+          </a>
+          <!-- Telegram -->
+          <a href="#" class="social-icon play-sound" aria-label="Telegram">
+            <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="6" width="10" height="1" fill="#FFFFFF"/>
+              <rect x="3" y="7" width="9" height="1" fill="#FFFFFF"/>
+              <rect x="4" y="8" width="7" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="9" width="3" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="10" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="11" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="9" y="9" width="2" height="3" fill="#FFFFFF"/>
+            </svg>
+          </a>
+          <!-- Facebook -->
+          <a href="#" class="social-icon play-sound" aria-label="Facebook">
+            <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="6" y="3" width="6" height="2" fill="#FFFFFF"/>
+              <rect x="6" y="5" width="2" height="9" fill="#FFFFFF"/>
+              <rect x="8" y="5" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="4" y="7" width="6" height="2" fill="#FFFFFF"/>
+            </svg>
+          </a>
+          <!-- X (Twitter) -->
+          <a href="#" class="social-icon play-sound" aria-label="X">
+            <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="5" y="5" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="9" y="5" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="7" y="7" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="5" y="9" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="9" y="9" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="3" y="11" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="11" y="11" width="2" height="2" fill="#FFFFFF"/>
+            </svg>
+          </a>
+          <!-- VK -->
+          <a href="#" class="social-icon play-sound" aria-label="VK">
+            <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="5" width="2" height="6" fill="#FFFFFF"/>
+              <rect x="4" y="11" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="9" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="6" width="1" height="3" fill="#FFFFFF"/>
+              <rect x="7" y="5" width="1" height="6" fill="#FFFFFF"/>
+              <rect x="8" y="5" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="10" y="5" width="1" height="2" fill="#FFFFFF"/>
+              <rect x="9" y="7" width="1" height="2" fill="#FFFFFF"/>
+              <rect x="10" y="9" width="1" height="2" fill="#FFFFFF"/>
+              <rect x="11" y="11" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+              <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         DOWNLOAD
+    ════════════════════════════════════════ -->
+    <section id="download" class="download">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="downloadTitle">COMING SOON</h2>
+        <p data-i18n="downloadText">Snowy Cats will be available for free on iOS and Android.</p>
+        <div class="download-buttons">
+          <a href="#" class="btn btn-blue btn-large play-sound">
+            <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+              <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+            </svg>
+            <span class="btn-text-stack">
+              <small data-i18n="appStoreSmall">Download on</small>
+              <span>APP STORE</span>
+            </span>
+          </a>
+          <a href="#" class="btn btn-orange btn-large play-sound">
+            <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+            </svg>
+            <span class="btn-text-stack">
+              <small data-i18n="googlePlaySmall">Get it on</small>
+              <span>GOOGLE PLAY</span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <svg class="logo-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect width="16" height="16" fill="#0288D1"/>
+              <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="3" y="2" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="11" y="2" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="3" y="6" width="10" height="6" fill="#FFFFFF"/>
+              <rect x="3" y="5" width="10" height="1" fill="#FFFFFF"/>
+              <rect x="5" y="8" width="2" height="2" fill="#1A1A1A"/>
+              <rect x="9" y="8" width="2" height="2" fill="#1A1A1A"/>
+              <rect x="6" y="8" width="1" height="1" fill="#4FC3F7"/>
+              <rect x="10" y="8" width="1" height="1" fill="#4FC3F7"/>
+              <rect x="7" y="10" width="2" height="1" fill="#FF8C2B"/>
+            </svg>
+            <span class="logo-text">SNOWY <span class="accent">CATS</span></span>
+          </a>
+          <p class="footer-tagline" data-i18n="footerTagline">Pixel cats & snowy adventures.</p>
+          <div class="footer-buttons">
+            <a href="#" class="btn btn-blue play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" fill="white">
+                <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+              </svg>
+              APP STORE
+            </a>
+            <a href="#" class="btn btn-orange play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+              </svg>
+              GOOGLE PLAY
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerLinksTitle">LINKS</h4>
+          <ul class="footer-links">
+            <li><a href="#about-game" class="play-sound" data-i18n="footerAbout">About the game</a></li>
+            <li><a href="#features" class="play-sound" data-i18n="footerFeatures">Features</a></li>
+            <li><a href="html/privacypoliticy.html" class="play-sound" data-i18n="footerPrivacy">Privacy Policy</a></li>
+            <li><a href="#" class="play-sound" data-i18n="footerTerms">Terms of Use</a></li>
+            <li><a href="#" class="play-sound" data-i18n="footerContacts">Contacts</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerSocialTitle">FOLLOW US</h4>
+          <div class="footer-social-icons">
+            <a href="#" class="footer-social-icon play-sound" aria-label="YouTube">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="12" height="8" fill="#FFFFFF"/>
+                <rect x="6" y="6" width="1" height="4" fill="#FF8C2B"/>
+                <rect x="7" y="6" width="1" height="4" fill="#FF8C2B"/>
+                <rect x="8" y="7" width="1" height="2" fill="#FF8C2B"/>
+                <rect x="9" y="7" width="1" height="2" fill="#FF8C2B"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-icon play-sound" aria-label="Telegram">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="6" width="10" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="7" width="9" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="8" width="7" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="9" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="10" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="11" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="9" width="2" height="3" fill="#FFFFFF"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-icon play-sound" aria-label="Facebook">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="3" width="6" height="2" fill="#FFFFFF"/>
+                <rect x="6" y="5" width="2" height="9" fill="#FFFFFF"/>
+                <rect x="8" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="4" y="7" width="6" height="2" fill="#FFFFFF"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-icon play-sound" aria-label="X">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="5" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="7" y="7" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="5" y="9" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="9" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="3" y="11" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="11" width="2" height="2" fill="#FFFFFF"/>
+              </svg>
+            </a>
+            <a href="#" class="footer-social-icon play-sound" aria-label="VK">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="5" width="2" height="6" fill="#FFFFFF"/>
+                <rect x="4" y="11" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="9" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="6" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="7" y="5" width="1" height="6" fill="#FFFFFF"/>
+                <rect x="8" y="5" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="10" y="5" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="7" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="10" y="9" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="11" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+                <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span class="made-by" data-i18n="footerCopy">© 2025 RED PIXELS. ALL RIGHTS RESERVED.</span>
+        <span data-i18n="footerMadeWith">Made with ♥ and 256 colors</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SOUND TOGGLE -->
+  <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" id="soundIcon">
+      <rect x="3" y="6" width="2" height="4" fill="#FFFFFF"/>
+      <rect x="5" y="5" width="1" height="6" fill="#FFFFFF"/>
+      <rect x="6" y="4" width="2" height="8" fill="#FFFFFF"/>
+      <rect x="10" y="6" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="10" y="9" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="11" y="7" width="1" height="2" fill="#FFFFFF"/>
+      <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+    </svg>
+  </button>
+
+  <script src="js/script.js" defer></script>
+</body>
+</html>
