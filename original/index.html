@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SNOWY CATS — 8-bit Platformer Adventure</title>
+  <meta name="description" content="Snowy Cats — a cute 2D pixel art platformer game about a brave cat exploring snowy worlds. Available on App Store and Google Play.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+
+  <!-- Pixel cat favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%234FC3F7'/%3E%3Cpath fill='%23FFFFFF' d='M3 4h2v1H3zm8 0h2v1h-2zM3 5h2v1H3zm1 0h1v1H4zm6 0h2v1h-2zm2 0h1v1h-1zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h2v1H2zm4 0h1v1H6zm3 0h1v1H9zm3 0h2v1h-2zM2 10h12v1H2zM3 11h10v1H3zM4 12h8v1H4z'/%3E%3Cpath fill='%231A1A1A' d='M6 8h1v1H6zm3 0h1v1H9z'/%3E%3C/svg%3E">
+
+  <style>
+    /* ════════════════════════════════════════
+       VARIABLES
+    ════════════════════════════════════════ */
+    :root {
+      --white: #FFFFFF;
+      --blue: #4FC3F7;
+      --blue-dark: #0288D1;
+      --blue-darker: #01579B;
+      --orange: #FF8C2B;
+      --orange-dark: #E65100;
+      --black: #1A1A1A;
+      --gray-soft: #E8F4FB;
+
+      --pixel: 4px;
+      --pixel-2: 8px;
+      --pixel-3: 12px;
+
+      --font-display: 'Press Start 2P', monospace;
+      --font-body: 'VT323', monospace;
+    }
+
+    /* ════════════════════════════════════════
+       RESET & BASE
+    ════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      -webkit-font-smoothing: none;
+      -moz-osx-font-smoothing: unset;
+      font-smooth: never;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: clamp(18px, 2.2vw, 22px);
+      line-height: 1.5;
+      color: var(--black);
+      background: var(--white);
+      overflow-x: hidden;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' shape-rendering='crispEdges'><path fill='black' d='M0 0h2v2H0zm2 2h2v2H2zm2 2h2v2H4zm2 2h2v2H6zm2 2h2v2H8zm2 2h2v2h-2zm-2 2h2v2H8zm-4 0h2v2H4zm0 2h2v2H4z'/><path fill='white' d='M2 0h2v2H2zm0 2h2v2H2zm2 2h2v2H4zm2 2h2v2H6zm2 2h2v2H8zm-4 4h4v2H4z'/></svg>") 0 0, auto;
+    }
+
+    img, svg {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: inherit;
+    }
+
+    /* ════════════════════════════════════════
+       TYPOGRAPHY
+    ════════════════════════════════════════ */
+    h1, h2, h3, .pixel-title {
+      font-family: var(--font-display);
+      letter-spacing: 0.05em;
+      line-height: 1.4;
+      color: var(--black);
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 64px);
+      line-height: 1.2;
+    }
+
+    h2 {
+      font-size: clamp(22px, 3.5vw, 36px);
+      margin-bottom: var(--pixel-3);
+    }
+
+    h3 {
+      font-size: clamp(14px, 1.6vw, 18px);
+      margin-bottom: var(--pixel-2);
+    }
+
+    p {
+      font-size: clamp(18px, 1.8vw, 22px);
+    }
+
+    /* ════════════════════════════════════════
+       PIXEL BORDERS (utility)
+    ════════════════════════════════════════ */
+    .pixel-border {
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+    }
+
+    /* Stepped/chunky shadow card */
+    .pixel-card {
+      background: var(--white);
+      position: relative;
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        var(--pixel) var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) calc(var(--pixel) * -1) 0 var(--black),
+        var(--pixel) calc(var(--pixel) * -1) 0 var(--black),
+        calc(var(--pixel) * -1) var(--pixel) 0 var(--black),
+        var(--pixel-2) var(--pixel-2) 0 var(--black);
+    }
+
+    /* ════════════════════════════════════════
+       PIXEL BUTTONS
+    ════════════════════════════════════════ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--pixel-2);
+      padding: var(--pixel-3) calc(var(--pixel-3) * 1.5);
+      font-family: var(--font-display);
+      font-size: clamp(10px, 1.1vw, 13px);
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform 0.05s steps(2), box-shadow 0.05s steps(2);
+      position: relative;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: var(--white);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        0 calc(var(--pixel) * 2) 0 var(--blue-darker),
+        0 calc(var(--pixel) * 3) 0 var(--black),
+        calc(var(--pixel) * -1) calc(var(--pixel) * 2) 0 var(--black),
+        var(--pixel) calc(var(--pixel) * 2) 0 var(--black);
+    }
+
+    .btn-orange {
+      background: var(--orange);
+      color: var(--white);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        0 calc(var(--pixel) * 2) 0 var(--orange-dark),
+        0 calc(var(--pixel) * 3) 0 var(--black),
+        calc(var(--pixel) * -1) calc(var(--pixel) * 2) 0 var(--black),
+        var(--pixel) calc(var(--pixel) * 2) 0 var(--black);
+    }
+
+    .btn:hover {
+      transform: translateY(2px);
+    }
+
+    .btn:active {
+      transform: translateY(var(--pixel));
+    }
+
+    .btn-blue:active {
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+    }
+
+    .btn-orange:active {
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+    }
+
+    .btn-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .btn-text-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+
+    .btn-text-stack small {
+      font-size: 0.7em;
+      opacity: 0.85;
+    }
+
+    .btn-large {
+      padding: calc(var(--pixel-3) * 1.4) calc(var(--pixel-3) * 2);
+      font-size: clamp(12px, 1.3vw, 15px);
+    }
+
+    /* ════════════════════════════════════════
+       SNOWFLAKES
+    ════════════════════════════════════════ */
+    #snowflakes {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .snowflake {
+      position: absolute;
+      background: var(--white);
+      top: -20px;
+      animation: fall linear infinite;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+    }
+
+    .snowflake.big {
+      box-shadow:
+        0 0 0 1px rgba(0,0,0,0.15),
+        var(--pixel) 0 0 var(--white),
+        calc(var(--pixel) * -1) 0 0 var(--white),
+        0 var(--pixel) 0 var(--white),
+        0 calc(var(--pixel) * -1) 0 var(--white);
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(110vh);
+      }
+    }
+
+    /* ════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════ */
+    .header {
+      position: sticky;
+      top: 32px;
+      z-index: 100;
+      background: var(--white);
+      padding: var(--pixel-2) clamp(var(--pixel-3), 4vw, 32px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--pixel-3);
+      border-bottom: var(--pixel) solid var(--black);
+      box-shadow: 0 var(--pixel) 0 var(--blue-dark);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--pixel-2);
+      flex-shrink: 0;
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: clamp(11px, 1.4vw, 16px);
+      color: var(--black);
+      letter-spacing: 0.08em;
+    }
+
+    .logo-text .accent {
+      color: var(--orange-dark);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--pixel-3);
+      flex-wrap: nowrap;
+    }
+
+    .header-btns {
+      display: flex;
+      gap: var(--pixel-2);
+    }
+
+    .header .btn {
+      padding: var(--pixel-2) var(--pixel-3);
+      font-size: 9px;
+    }
+
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      background: var(--white);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+      flex-shrink: 0;
+    }
+
+    .lang-btn {
+      padding: var(--pixel-2) var(--pixel-3);
+      font-family: var(--font-display);
+      font-size: 10px;
+      color: var(--black);
+      background: var(--white);
+      transition: background 0.05s steps(2);
+    }
+
+    .lang-btn.active {
+      background: var(--orange);
+      color: var(--white);
+    }
+
+    .lang-btn:not(.active):hover {
+      background: var(--gray-soft);
+    }
+
+    .hamburger {
+      display: none;
+      width: 40px;
+      height: 32px;
+      background: var(--blue);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 4px;
+      background: var(--white);
+    }
+
+    /* ════════════════════════════════════════
+       HERO
+    ════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      background: var(--blue);
+      padding: clamp(40px, 8vw, 100px) clamp(20px, 4vw, 48px) clamp(60px, 10vw, 140px);
+      overflow: hidden;
+      border-bottom: var(--pixel) solid var(--black);
+    }
+
+    /* Pixel cloud pattern */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 10% 20%, var(--white) 2px, transparent 3px),
+        radial-gradient(circle at 80% 60%, var(--white) 2px, transparent 3px),
+        radial-gradient(circle at 50% 80%, var(--white) 2px, transparent 3px),
+        radial-gradient(circle at 30% 50%, rgba(255,255,255,0.5) 2px, transparent 3px);
+      background-size: 240px 240px;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Pixel ground at bottom of hero */
+    .hero-ground {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: var(--white);
+      border-top: var(--pixel) solid var(--black);
+      z-index: 2;
+    }
+
+    .hero-ground::before {
+      content: '';
+      position: absolute;
+      top: -16px;
+      left: 0;
+      right: 0;
+      height: 16px;
+      background-image:
+        linear-gradient(to right,
+          var(--white) 0, var(--white) 12px,
+          transparent 12px, transparent 24px,
+          var(--white) 24px, var(--white) 36px,
+          transparent 36px, transparent 48px,
+          var(--white) 48px, var(--white) 60px,
+          transparent 60px, transparent 72px);
+      background-size: 72px 16px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(24px, 5vw, 60px);
+      align-items: center;
+    }
+
+    .hero-title {
+      color: var(--white);
+      text-shadow:
+        var(--pixel) 0 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        var(--pixel) var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) calc(var(--pixel) * -1) 0 var(--black),
+        var(--pixel) calc(var(--pixel) * -1) 0 var(--black),
+        calc(var(--pixel) * -1) var(--pixel) 0 var(--black),
+        var(--pixel-2) var(--pixel-2) 0 var(--orange-dark);
+      margin-bottom: var(--pixel-3);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-body);
+      font-size: clamp(20px, 2.4vw, 28px);
+      color: var(--white);
+      margin-bottom: calc(var(--pixel-3) * 2);
+      max-width: 480px;
+      text-shadow: var(--pixel) var(--pixel) 0 var(--black);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: var(--pixel-3);
+      flex-wrap: wrap;
+    }
+
+    /* Hero cat illustration */
+    .hero-cat {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: bob 1s steps(2) infinite;
+    }
+
+    @keyframes bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-cat svg {
+      width: 100%;
+      max-width: 320px;
+      height: auto;
+    }
+
+    /* Decorative pixel platforms */
+    .platform {
+      position: absolute;
+      background: var(--orange);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        0 var(--pixel) 0 var(--orange-dark) inset;
+      z-index: 2;
+    }
+
+    .platform-1 {
+      width: 80px;
+      height: 16px;
+      top: 30%;
+      left: 8%;
+    }
+
+    .platform-2 {
+      width: 60px;
+      height: 16px;
+      top: 60%;
+      right: 12%;
+    }
+
+    /* ════════════════════════════════════════
+       SECTIONS
+    ════════════════════════════════════════ */
+    section {
+      position: relative;
+      padding: clamp(60px, 9vw, 120px) clamp(20px, 4vw, 48px);
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: clamp(32px, 5vw, 64px);
+      position: relative;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: var(--pixel);
+      background: var(--orange);
+      margin: var(--pixel-3) auto 0;
+      box-shadow:
+        calc(var(--pixel) * 5) 0 0 var(--blue),
+        calc(var(--pixel) * -5) 0 0 var(--blue);
+    }
+
+    /* ════════════════════════════════════════
+       ABOUT
+    ════════════════════════════════════════ */
+    .about {
+      background: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 5vw, 60px);
+      align-items: center;
+    }
+
+    .about-text p {
+      margin-bottom: var(--pixel-3);
+    }
+
+    .about-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .about-illustration {
+      position: relative;
+      aspect-ratio: 1;
+      background: var(--blue);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        var(--pixel-2) var(--pixel-2) 0 var(--black);
+      overflow: hidden;
+    }
+
+    .about-illustration svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ════════════════════════════════════════
+       FEATURES
+    ════════════════════════════════════════ */
+    .features {
+      background: var(--gray-soft);
+      border-top: var(--pixel) solid var(--black);
+      border-bottom: var(--pixel) solid var(--black);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    .feature-card {
+      background: var(--white);
+      padding: clamp(20px, 3vw, 32px);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        var(--pixel-2) var(--pixel-2) 0 var(--black);
+      transition: transform 0.05s steps(2), box-shadow 0.05s steps(2);
+    }
+
+    .feature-card:hover {
+      transform: translate(calc(var(--pixel) * -1), calc(var(--pixel) * -1));
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        calc(var(--pixel) * 3) calc(var(--pixel) * 3) 0 var(--black);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      margin-bottom: var(--pixel-3);
+    }
+
+    .feature-card:nth-child(odd) .feature-icon-bg {
+      background: var(--blue);
+    }
+
+    .feature-card:nth-child(even) .feature-icon-bg {
+      background: var(--orange);
+    }
+
+    .feature-icon-bg {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+      margin-bottom: var(--pixel-3);
+    }
+
+    .feature-card h3 {
+      color: var(--black);
+    }
+
+    .feature-card p {
+      font-size: clamp(16px, 1.5vw, 18px);
+    }
+
+    /* ════════════════════════════════════════
+       SCREENSHOTS
+    ════════════════════════════════════════ */
+    .screenshots {
+      background: var(--white);
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    .screenshot {
+      aspect-ratio: 16 / 10;
+      position: relative;
+      background: var(--blue);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        var(--pixel-2) var(--pixel-2) 0 var(--black);
+      overflow: hidden;
+      transition: transform 0.05s steps(2);
+    }
+
+    .screenshot:hover {
+      transform: translate(calc(var(--pixel) * -1), calc(var(--pixel) * -1));
+    }
+
+    .screenshot svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .screenshot-label {
+      position: absolute;
+      bottom: var(--pixel-2);
+      left: var(--pixel-2);
+      background: var(--black);
+      color: var(--white);
+      padding: 4px 8px;
+      font-family: var(--font-display);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ════════════════════════════════════════
+       DOWNLOAD
+    ════════════════════════════════════════ */
+    .download {
+      background: var(--orange);
+      border-top: var(--pixel) solid var(--black);
+      border-bottom: var(--pixel) solid var(--black);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .download::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,0.3) 2px, transparent 3px),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 2px, transparent 3px),
+        radial-gradient(circle at 90% 20%, rgba(255,255,255,0.3) 2px, transparent 3px);
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+
+    .download .section-title {
+      color: var(--white);
+      text-shadow:
+        var(--pixel) 0 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        var(--pixel) var(--pixel) 0 var(--orange-dark);
+    }
+
+    .download p {
+      color: var(--white);
+      font-size: clamp(20px, 2.2vw, 26px);
+      margin-bottom: calc(var(--pixel-3) * 2);
+      text-shadow: 2px 2px 0 var(--orange-dark);
+    }
+
+    .download-buttons {
+      display: flex;
+      gap: var(--pixel-3);
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: calc(var(--pixel-3) * 2);
+    }
+
+    .qr-row {
+      display: flex;
+      gap: clamp(20px, 4vw, 48px);
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: var(--pixel-3);
+    }
+
+    .qr-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--pixel-2);
+    }
+
+    .qr-code {
+      width: 96px;
+      height: 96px;
+      background: var(--white);
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black);
+      padding: 6px;
+    }
+
+    .qr-code svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .qr-label {
+      font-family: var(--font-display);
+      font-size: 9px;
+      color: var(--white);
+      text-shadow: 1px 1px 0 var(--black);
+    }
+
+    /* ════════════════════════════════════════
+       FOOTER
+    ════════════════════════════════════════ */
+    footer {
+      background: var(--black);
+      color: var(--white);
+      padding: clamp(40px, 6vw, 80px) clamp(20px, 4vw, 48px) var(--pixel-3);
+      position: relative;
+      z-index: 10;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      margin-bottom: calc(var(--pixel-3) * 3);
+    }
+
+    .footer-brand .logo-text {
+      color: var(--white);
+    }
+
+    .footer-tagline {
+      margin-top: var(--pixel-3);
+      font-size: 18px;
+      color: var(--blue);
+    }
+
+    .footer-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pixel-3);
+      align-items: flex-start;
+    }
+
+    .footer h4 {
+      font-family: var(--font-display);
+      font-size: 12px;
+      color: var(--orange);
+      margin-bottom: var(--pixel-3);
+      letter-spacing: 0.08em;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: var(--pixel-2);
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--white);
+      font-size: 18px;
+      transition: color 0.05s steps(2);
+    }
+
+    .footer-links a:hover {
+      color: var(--blue);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: var(--pixel-2);
+      flex-wrap: wrap;
+    }
+
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--blue-darker);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--white),
+        0 var(--pixel) 0 var(--white),
+        calc(var(--pixel) * -1) 0 0 var(--white),
+        var(--pixel) 0 0 var(--white);
+      transition: transform 0.05s steps(2), background 0.05s steps(2);
+    }
+
+    .social-icon:hover {
+      background: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .social-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .footer-bottom {
+      border-top: var(--pixel) solid var(--blue-darker);
+      padding-top: var(--pixel-3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--pixel-3);
+      flex-wrap: wrap;
+      font-size: 16px;
+      color: var(--blue);
+    }
+
+    .footer-bottom .made-by {
+      font-family: var(--font-display);
+      font-size: 10px;
+    }
+
+    /* ════════════════════════════════════════
+       RESPONSIVE
+    ════════════════════════════════════════ */
+    @media (max-width: 1023px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .screenshots-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 767px) {
+      :root {
+        --pixel: 3px;
+        --pixel-2: 6px;
+        --pixel-3: 10px;
+      }
+
+      .header {
+        padding: var(--pixel-2) var(--pixel-3);
+      }
+
+      .nav-actions .header-btns,
+      .nav-actions .lang-switch {
+        display: none;
+      }
+
+      .nav-actions.open .header-btns,
+      .nav-actions.open .lang-switch {
+        display: flex;
+      }
+
+      .nav-actions.open {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        padding: var(--pixel-3);
+        gap: var(--pixel-3);
+        border-bottom: var(--pixel) solid var(--black);
+      }
+
+      .nav-actions.open .header-btns {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .nav-actions.open .header-btns .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero {
+        padding-bottom: 80px;
+      }
+
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-buttons {
+        justify-content: center;
+      }
+
+      .hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .hero-cat {
+        order: -1;
+      }
+
+      .hero-cat svg {
+        max-width: 200px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-illustration {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      .features-grid,
+      .screenshots-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-buttons {
+        align-items: stretch;
+      }
+
+      .footer-buttons .btn {
+        justify-content: center;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .download-buttons {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .download-buttons .btn {
+        justify-content: center;
+      }
+
+      h1 .text-shadow-stack {
+        font-size: 0.7em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .platform { display: none; }
+
+      .logo-text {
+        font-size: 10px;
+      }
+
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+      }
+    }
+
+    /* Sound toggle */
+    .sound-toggle {
+      position: fixed;
+      bottom: var(--pixel-3);
+      right: var(--pixel-3);
+      z-index: 50;
+      width: 48px;
+      height: 48px;
+      background: var(--orange);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow:
+        0 calc(var(--pixel) * -1) 0 var(--black),
+        0 var(--pixel) 0 var(--black),
+        calc(var(--pixel) * -1) 0 0 var(--black),
+        var(--pixel) 0 0 var(--black),
+        var(--pixel) var(--pixel) 0 var(--orange-dark);
+    }
+
+    .sound-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .sound-toggle.muted {
+      background: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- VERSION SWITCHER (временно) -->
+  <div style="position:sticky;top:0;z-index:9999;height:32px;background:#111;display:flex;justify-content:center;align-items:center;gap:6px;font-family:'Courier New',monospace;font-size:11px;border-bottom:1px solid #333;">
+    <span style="color:#555;margin-right:4px;">ДИЗАЙН:</span>
+    <a href="../old/" style="color:#aaa;text-decoration:none;padding:2px 10px;border:1px solid #444;">СТАРЫЙ</a>
+    <a href="../" style="color:#aaa;text-decoration:none;padding:2px 10px;border:1px solid #444;">НОВЫЙ</a>
+    <a href="./" style="color:#FF8C2B;text-decoration:none;padding:2px 10px;border:1px solid #FF8C2B;">ОРИГИНАЛ ✓</a>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SNOWFLAKES CONTAINER
+  ════════════════════════════════════════ -->
+  <div id="snowflakes" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════ -->
+  <header class="header">
+    <a href="#" class="logo">
+      <!-- Pixel cat logo -->
+      <svg class="logo-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+        <rect width="16" height="16" fill="#4FC3F7"/>
+        <!-- Cat ears -->
+        <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+        <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+        <rect x="3" y="2" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="11" y="2" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="3" y="5" width="2" height="1" fill="#1A1A1A"/>
+        <rect x="11" y="5" width="2" height="1" fill="#1A1A1A"/>
+        <!-- Inner ears -->
+        <rect x="4" y="4" width="1" height="1" fill="#FF8C2B"/>
+        <rect x="11" y="4" width="1" height="1" fill="#FF8C2B"/>
+        <!-- Head -->
+        <rect x="3" y="6" width="10" height="6" fill="#FFFFFF"/>
+        <rect x="2" y="6" width="1" height="6" fill="#1A1A1A"/>
+        <rect x="13" y="6" width="1" height="6" fill="#1A1A1A"/>
+        <rect x="3" y="12" width="10" height="1" fill="#1A1A1A"/>
+        <rect x="3" y="5" width="10" height="1" fill="#FFFFFF"/>
+        <!-- Eyes -->
+        <rect x="5" y="8" width="2" height="2" fill="#1A1A1A"/>
+        <rect x="9" y="8" width="2" height="2" fill="#1A1A1A"/>
+        <rect x="6" y="8" width="1" height="1" fill="#4FC3F7"/>
+        <rect x="10" y="8" width="1" height="1" fill="#4FC3F7"/>
+        <!-- Nose -->
+        <rect x="7" y="10" width="2" height="1" fill="#FF8C2B"/>
+        <!-- Mouth -->
+        <rect x="6" y="11" width="1" height="1" fill="#1A1A1A"/>
+        <rect x="9" y="11" width="1" height="1" fill="#1A1A1A"/>
+      </svg>
+      <span class="logo-text">SNOWY <span class="accent">CATS</span></span>
+    </a>
+
+    <nav class="nav-actions" id="navActions">
+      <div class="header-btns">
+        <a href="#download" class="btn btn-blue play-sound" aria-label="Download on App Store">
+          <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+          </svg>
+          <span class="btn-text-stack">
+            <small data-i18n="appStoreSmall">Download on</small>
+            <span>APP STORE</span>
+          </span>
+        </a>
+        <a href="#download" class="btn btn-orange play-sound" aria-label="Get it on Google Play">
+          <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+            <path fill="#1A1A1A" d="M9 4h1v1H9zm1 1h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm-1 1h1v1h-1zm-1 1h1v1H9zm-1 1h1v1H8z" opacity="0.3"/>
+          </svg>
+          <span class="btn-text-stack">
+            <small data-i18n="googlePlaySmall">Get it on</small>
+            <span>GOOGLE PLAY</span>
+          </span>
+        </a>
+      </div>
+
+      <div class="lang-switch">
+        <button class="lang-btn active play-sound" data-lang="en">EN</button>
+        <button class="lang-btn play-sound" data-lang="ru">RU</button>
+      </div>
+    </nav>
+
+    <button class="hamburger play-sound" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </header>
+
+  <main>
+    <!-- ════════════════════════════════════════
+         HERO
+    ════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="platform platform-1"></div>
+      <div class="platform platform-2"></div>
+
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title" data-i18n="heroTitle">SNOWY CATS</h1>
+          <p class="hero-subtitle" data-i18n="heroSubtitle">A brave little cat. Endless snowy worlds. 100+ levels of pixel-perfect platforming adventure.</p>
+          <div class="hero-buttons">
+            <a href="#download" class="btn btn-blue btn-large play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+                <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+              </svg>
+              <span class="btn-text-stack">
+                <small data-i18n="appStoreSmall">Download on</small>
+                <span>APP STORE</span>
+              </span>
+            </a>
+            <a href="#download" class="btn btn-orange btn-large play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+              </svg>
+              <span class="btn-text-stack">
+                <small data-i18n="googlePlaySmall">Get it on</small>
+                <span>GOOGLE PLAY</span>
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Big pixel cat hero illustration -->
+        <div class="hero-cat">
+          <svg viewBox="0 0 32 32" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+            <!-- Ears -->
+            <rect x="6" y="4" width="4" height="2" fill="#1A1A1A"/>
+            <rect x="22" y="4" width="4" height="2" fill="#1A1A1A"/>
+            <rect x="6" y="6" width="4" height="2" fill="#FFFFFF"/>
+            <rect x="22" y="6" width="4" height="2" fill="#FFFFFF"/>
+            <rect x="7" y="7" width="2" height="1" fill="#FF8C2B"/>
+            <rect x="23" y="7" width="2" height="1" fill="#FF8C2B"/>
+            <!-- Head outline -->
+            <rect x="5" y="8" width="22" height="2" fill="#1A1A1A"/>
+            <rect x="4" y="9" width="1" height="10" fill="#1A1A1A"/>
+            <rect x="27" y="9" width="1" height="10" fill="#1A1A1A"/>
+            <rect x="5" y="19" width="22" height="2" fill="#1A1A1A"/>
+            <!-- Head fill -->
+            <rect x="5" y="10" width="22" height="9" fill="#FFFFFF"/>
+            <!-- Eyes (big anime style) -->
+            <rect x="9" y="12" width="4" height="4" fill="#1A1A1A"/>
+            <rect x="19" y="12" width="4" height="4" fill="#1A1A1A"/>
+            <rect x="10" y="13" width="2" height="2" fill="#4FC3F7"/>
+            <rect x="20" y="13" width="2" height="2" fill="#4FC3F7"/>
+            <rect x="11" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="21" y="13" width="1" height="1" fill="#FFFFFF"/>
+            <!-- Cheeks (blush) -->
+            <rect x="7" y="16" width="2" height="1" fill="#FF8C2B" opacity="0.5"/>
+            <rect x="23" y="16" width="2" height="1" fill="#FF8C2B" opacity="0.5"/>
+            <!-- Nose -->
+            <rect x="15" y="16" width="2" height="1" fill="#FF8C2B"/>
+            <!-- Mouth -->
+            <rect x="14" y="17" width="1" height="1" fill="#1A1A1A"/>
+            <rect x="17" y="17" width="1" height="1" fill="#1A1A1A"/>
+            <rect x="15" y="18" width="2" height="1" fill="#1A1A1A"/>
+            <!-- Body -->
+            <rect x="9" y="21" width="14" height="1" fill="#1A1A1A"/>
+            <rect x="8" y="22" width="1" height="6" fill="#1A1A1A"/>
+            <rect x="23" y="22" width="1" height="6" fill="#1A1A1A"/>
+            <rect x="9" y="22" width="14" height="6" fill="#FFFFFF"/>
+            <rect x="9" y="28" width="14" height="1" fill="#1A1A1A"/>
+            <!-- Scarf (orange) -->
+            <rect x="9" y="21" width="14" height="2" fill="#FF8C2B"/>
+            <rect x="22" y="22" width="2" height="3" fill="#FF8C2B"/>
+            <rect x="22" y="22" width="1" height="1" fill="#1A1A1A"/>
+            <rect x="23" y="25" width="1" height="1" fill="#E65100"/>
+            <!-- Paws -->
+            <rect x="10" y="29" width="3" height="1" fill="#1A1A1A"/>
+            <rect x="19" y="29" width="3" height="1" fill="#1A1A1A"/>
+            <!-- Snowflakes around -->
+            <rect x="2" y="2" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="29" y="3" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="1" y="14" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="30" y="20" width="1" height="1" fill="#FFFFFF"/>
+            <rect x="3" y="25" width="1" height="1" fill="#FFFFFF"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="hero-ground"></div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         ABOUT
+    ════════════════════════════════════════ -->
+    <section id="about" class="about">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="aboutTitle">ABOUT THE GAME</h2>
+        <div class="about-grid">
+          <div class="about-text">
+            <p data-i18n="aboutP1">Meet SNOWY — a tiny cat with a big heart, lost in an endless winter world. Jump across icy platforms, dodge falling icicles, befriend forest spirits, and uncover the secret of the eternal snowfall.</p>
+            <p data-i18n="aboutP2">Inspired by classic 8-bit platformers we grew up with, Snowy Cats blends crisp pixel graphics, hand-crafted level design and a chiptune soundtrack into one cozy adventure.</p>
+            <p data-i18n="aboutP3">Built by two developers, one cat, and a whole lot of love. No microtransactions. No ads. Just pure platforming joy.</p>
+          </div>
+          <div class="about-illustration">
+            <!-- Pixel scene: cat on snowy platform with mountains -->
+            <svg viewBox="0 0 64 64" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <!-- Sky -->
+              <rect width="64" height="40" fill="#4FC3F7"/>
+              <!-- Stars/snow -->
+              <rect x="8" y="6" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="20" y="4" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="40" y="8" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="55" y="5" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="48" y="14" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="12" y="18" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="32" y="22" width="1" height="1" fill="#FFFFFF"/>
+              <!-- Distant mountains -->
+              <path fill="#0288D1" d="M0 28h2v-1h2v-2h2v-3h2v-2h2v3h2v2h2v1h2v2H0zM20 30h2v-2h2v-3h2v-2h2v-1h2v3h2v2h2v3H20zM40 28h2v-3h2v-2h2v-2h2v-1h2v2h2v2h2v2h2v2H40zM58 30h2v-2h2v-1h2v3h-6z"/>
+              <!-- Mountain snow caps -->
+              <rect x="6" y="22" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="26" y="22" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="48" y="21" width="2" height="2" fill="#FFFFFF"/>
+              <!-- Snow ground -->
+              <rect y="40" width="64" height="24" fill="#FFFFFF"/>
+              <rect y="40" width="64" height="1" fill="#1A1A1A"/>
+              <!-- Platform -->
+              <rect x="20" y="44" width="20" height="3" fill="#FF8C2B"/>
+              <rect x="20" y="43" width="20" height="1" fill="#1A1A1A"/>
+              <rect x="20" y="47" width="20" height="1" fill="#E65100"/>
+              <!-- Tree silhouette -->
+              <rect x="48" y="32" width="2" height="8" fill="#1A1A1A"/>
+              <rect x="46" y="34" width="6" height="4" fill="#1A1A1A"/>
+              <rect x="46" y="32" width="6" height="2" fill="#FFFFFF"/>
+              <rect x="44" y="36" width="10" height="2" fill="#1A1A1A"/>
+              <rect x="44" y="36" width="10" height="1" fill="#FFFFFF"/>
+              <!-- Cat on platform -->
+              <rect x="26" y="40" width="6" height="4" fill="#FFFFFF"/>
+              <rect x="26" y="39" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="31" y="39" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="27" y="41" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="30" y="41" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="28" y="42" width="2" height="1" fill="#FF8C2B"/>
+              <!-- Snowflakes falling -->
+              <rect x="14" y="10" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="36" y="14" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="52" y="20" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="6" y="28" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="60" y="32" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         FEATURES
+    ════════════════════════════════════════ -->
+    <section id="features" class="features">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="featuresTitle">FEATURES</h2>
+        <div class="features-grid">
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- 100 levels icon: stack of squares -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="11" width="12" height="3" fill="#FFFFFF"/>
+                <rect x="3" y="7" width="10" height="3" fill="#FFFFFF"/>
+                <rect x="4" y="3" width="8" height="3" fill="#FFFFFF"/>
+                <rect x="2" y="11" width="12" height="1" fill="#1A1A1A"/>
+                <rect x="3" y="7" width="10" height="1" fill="#1A1A1A"/>
+                <rect x="4" y="3" width="8" height="1" fill="#1A1A1A"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature1Title">100+ LEVELS</h3>
+            <p data-i18n="feature1Desc">Hand-crafted stages across six unique snowy biomes. From frozen forests to crystal caves.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- Pixel art icon: paintbrush/grid -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="7" y="3" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="3" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="3" y="7" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="7" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="3" y="11" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="7" y="11" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="11" y="11" width="3" height="3" fill="#FFFFFF"/>
+                <rect x="7" y="7" width="3" height="3" fill="#1A1A1A"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature2Title">CUTE PIXEL ART</h3>
+            <p data-i18n="feature2Desc">Every sprite drawn pixel by pixel. Crisp 16-bit aesthetics with modern animation polish.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- Music note icon -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="3" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="4" width="1" height="7" fill="#FFFFFF"/>
+                <rect x="6" y="10" width="4" height="3" fill="#FFFFFF"/>
+                <rect x="6" y="9" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="11" y="4" width="1" height="1" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature3Title">CHIPTUNE OST</h3>
+            <p data-i18n="feature3Desc">Original soundtrack composed in authentic 8-bit. 18 tracks that get stuck in your head.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- Boss / sword icon -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="7" y="2" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="7" y="3" width="2" height="8" fill="#FFFFFF"/>
+                <rect x="5" y="10" width="6" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="11" width="4" height="2" fill="#FFFFFF"/>
+                <rect x="7" y="13" width="2" height="1" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature4Title">BOSS BATTLES</h3>
+            <p data-i18n="feature4Desc">Twelve unique boss fights. Each with custom mechanics. Each guarding a forgotten secret.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- Heart icon -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="3" height="2" fill="#FFFFFF"/>
+                <rect x="10" y="4" width="3" height="2" fill="#FFFFFF"/>
+                <rect x="2" y="6" width="12" height="3" fill="#FFFFFF"/>
+                <rect x="3" y="9" width="10" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="10" width="8" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="11" width="6" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="12" width="4" height="1" fill="#FFFFFF"/>
+                <rect x="7" y="13" width="2" height="1" fill="#FFFFFF"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature5Title">HIDDEN SECRETS</h3>
+            <p data-i18n="feature5Desc">Find 50+ hidden rooms, alternate paths, secret characters and unlockable cosmetics.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon-bg">
+              <!-- Crossplatform / devices icon -->
+              <svg width="32" height="32" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="3" width="9" height="6" fill="#FFFFFF"/>
+                <rect x="3" y="4" width="7" height="4" fill="none" stroke="#1A1A1A"/>
+                <rect x="5" y="10" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="11" y="6" width="3" height="7" fill="#FFFFFF"/>
+                <rect x="12" y="7" width="1" height="4" fill="#1A1A1A"/>
+              </svg>
+            </div>
+            <h3 data-i18n="feature6Title">CROSS-PLATFORM</h3>
+            <p data-i18n="feature6Desc">Play on iOS and Android. Cloud saves sync your progress between all devices.</p>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         SCREENSHOTS
+    ════════════════════════════════════════ -->
+    <section id="screenshots" class="screenshots">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="screenshotsTitle">SCREENSHOTS</h2>
+        <div class="screenshots-grid">
+
+          <!-- Screenshot 1: Forest -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="28" fill="#4FC3F7"/>
+              <!-- Sun -->
+              <rect x="48" y="4" width="6" height="6" fill="#FFFFFF"/>
+              <rect x="50" y="3" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="50" y="10" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="47" y="6" width="1" height="2" fill="#FFFFFF"/>
+              <rect x="54" y="6" width="1" height="2" fill="#FFFFFF"/>
+              <!-- Trees -->
+              <rect x="2" y="14" width="4" height="14" fill="#1A1A1A"/>
+              <rect x="0" y="16" width="8" height="8" fill="#1A1A1A"/>
+              <rect x="0" y="14" width="8" height="2" fill="#FFFFFF"/>
+              <rect x="14" y="18" width="3" height="10" fill="#1A1A1A"/>
+              <rect x="12" y="20" width="7" height="6" fill="#1A1A1A"/>
+              <rect x="12" y="18" width="7" height="2" fill="#FFFFFF"/>
+              <rect x="36" y="16" width="4" height="12" fill="#1A1A1A"/>
+              <rect x="34" y="18" width="8" height="8" fill="#1A1A1A"/>
+              <rect x="34" y="16" width="8" height="2" fill="#FFFFFF"/>
+              <!-- Snow ground -->
+              <rect y="28" width="64" height="12" fill="#FFFFFF"/>
+              <rect y="28" width="64" height="1" fill="#1A1A1A"/>
+              <!-- Platform -->
+              <rect x="20" y="32" width="14" height="2" fill="#FF8C2B"/>
+              <rect x="20" y="31" width="14" height="1" fill="#1A1A1A"/>
+              <!-- Cat -->
+              <rect x="25" y="28" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="25" y="27" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="28" y="27" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="26" y="29" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="27" y="29" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Coin -->
+              <rect x="44" y="20" width="2" height="2" fill="#FF8C2B"/>
+              <rect x="45" y="19" width="1" height="1" fill="#FF8C2B"/>
+              <rect x="44" y="22" width="1" height="1" fill="#E65100"/>
+              <!-- Snow -->
+              <rect x="10" y="6" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="30" y="10" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="56" y="14" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+            <span class="screenshot-label">LVL 1</span>
+          </div>
+
+          <!-- Screenshot 2: Cave -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="40" fill="#01579B"/>
+              <!-- Crystals on ceiling -->
+              <rect x="4" y="0" width="2" height="6" fill="#4FC3F7"/>
+              <rect x="3" y="0" width="1" height="3" fill="#4FC3F7"/>
+              <rect x="6" y="0" width="1" height="3" fill="#4FC3F7"/>
+              <rect x="20" y="0" width="3" height="8" fill="#4FC3F7"/>
+              <rect x="40" y="0" width="2" height="5" fill="#4FC3F7"/>
+              <rect x="50" y="0" width="3" height="9" fill="#4FC3F7"/>
+              <!-- Cave walls -->
+              <rect x="0" y="6" width="2" height="34" fill="#1A1A1A"/>
+              <rect x="62" y="9" width="2" height="31" fill="#1A1A1A"/>
+              <!-- Crystals on ground -->
+              <rect x="10" y="32" width="3" height="6" fill="#4FC3F7"/>
+              <rect x="44" y="30" width="4" height="8" fill="#4FC3F7"/>
+              <!-- Ground -->
+              <rect y="34" width="64" height="6" fill="#0288D1"/>
+              <rect y="34" width="64" height="1" fill="#1A1A1A"/>
+              <!-- Platform -->
+              <rect x="22" y="22" width="12" height="2" fill="#FF8C2B"/>
+              <rect x="22" y="21" width="12" height="1" fill="#1A1A1A"/>
+              <!-- Cat -->
+              <rect x="26" y="18" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="26" y="17" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="29" y="17" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="27" y="19" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="28" y="19" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Spikes -->
+              <rect x="36" y="32" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="38" y="33" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="35" y="33" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+            <span class="screenshot-label">LVL 2</span>
+          </div>
+
+          <!-- Screenshot 3: Boss -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="40" fill="#1A1A1A"/>
+              <!-- Stars -->
+              <rect x="6" y="4" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="20" y="2" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="36" y="6" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="54" y="3" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="14" y="10" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="48" y="12" width="1" height="1" fill="#FFFFFF"/>
+              <!-- Moon -->
+              <rect x="46" y="6" width="6" height="6" fill="#FFFFFF"/>
+              <rect x="48" y="7" width="2" height="1" fill="#1A1A1A"/>
+              <rect x="48" y="10" width="3" height="1" fill="#1A1A1A"/>
+              <!-- Boss (big yeti) -->
+              <rect x="30" y="14" width="14" height="2" fill="#1A1A1A"/>
+              <rect x="28" y="16" width="18" height="14" fill="#FFFFFF"/>
+              <rect x="28" y="16" width="1" height="14" fill="#1A1A1A"/>
+              <rect x="45" y="16" width="1" height="14" fill="#1A1A1A"/>
+              <rect x="28" y="30" width="18" height="1" fill="#1A1A1A"/>
+              <!-- Boss eyes -->
+              <rect x="32" y="20" width="3" height="3" fill="#FF8C2B"/>
+              <rect x="39" y="20" width="3" height="3" fill="#FF8C2B"/>
+              <rect x="33" y="21" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="40" y="21" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Mouth -->
+              <rect x="34" y="26" width="6" height="2" fill="#1A1A1A"/>
+              <rect x="35" y="27" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="38" y="27" width="1" height="1" fill="#FFFFFF"/>
+              <!-- Ground -->
+              <rect y="34" width="64" height="6" fill="#0288D1"/>
+              <rect y="34" width="64" height="1" fill="#1A1A1A"/>
+              <!-- Cat -->
+              <rect x="6" y="30" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="6" y="29" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="9" y="29" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="7" y="31" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="8" y="31" width="1" height="1" fill="#1A1A1A"/>
+              <!-- HP bar -->
+              <rect x="2" y="2" width="20" height="3" fill="#1A1A1A"/>
+              <rect x="3" y="3" width="14" height="1" fill="#FF8C2B"/>
+            </svg>
+            <span class="screenshot-label">BOSS</span>
+          </div>
+
+          <!-- Screenshot 4: Sky -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="40" fill="#FF8C2B"/>
+              <!-- Clouds -->
+              <rect x="4" y="6" width="10" height="4" fill="#FFFFFF"/>
+              <rect x="6" y="4" width="6" height="2" fill="#FFFFFF"/>
+              <rect x="4" y="10" width="10" height="1" fill="#1A1A1A"/>
+              <rect x="40" y="10" width="14" height="4" fill="#FFFFFF"/>
+              <rect x="42" y="8" width="10" height="2" fill="#FFFFFF"/>
+              <rect x="40" y="14" width="14" height="1" fill="#1A1A1A"/>
+              <!-- Floating platform 1 -->
+              <rect x="8" y="22" width="12" height="3" fill="#0288D1"/>
+              <rect x="8" y="21" width="12" height="1" fill="#1A1A1A"/>
+              <rect x="8" y="22" width="12" height="1" fill="#FFFFFF"/>
+              <!-- Floating platform 2 -->
+              <rect x="36" y="28" width="14" height="3" fill="#0288D1"/>
+              <rect x="36" y="27" width="14" height="1" fill="#1A1A1A"/>
+              <rect x="36" y="28" width="14" height="1" fill="#FFFFFF"/>
+              <!-- Cat jumping -->
+              <rect x="24" y="20" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="24" y="19" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="27" y="19" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="25" y="21" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="26" y="21" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Birds -->
+              <rect x="50" y="4" width="2" height="1" fill="#1A1A1A"/>
+              <rect x="49" y="3" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="52" y="3" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="58" y="6" width="2" height="1" fill="#1A1A1A"/>
+              <rect x="57" y="5" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="60" y="5" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Coin -->
+              <rect x="42" y="22" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="43" y="21" width="1" height="1" fill="#FFFFFF"/>
+            </svg>
+            <span class="screenshot-label">LVL 4</span>
+          </div>
+
+          <!-- Screenshot 5: Underwater -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="40" fill="#0288D1"/>
+              <!-- Water surface -->
+              <rect y="0" width="64" height="2" fill="#4FC3F7"/>
+              <rect y="2" width="64" height="1" fill="#FFFFFF"/>
+              <!-- Bubbles -->
+              <rect x="10" y="14" width="2" height="2" fill="#FFFFFF" opacity="0.6"/>
+              <rect x="44" y="20" width="2" height="2" fill="#FFFFFF" opacity="0.6"/>
+              <rect x="20" y="26" width="1" height="1" fill="#FFFFFF" opacity="0.6"/>
+              <rect x="56" y="10" width="3" height="3" fill="#FFFFFF" opacity="0.6"/>
+              <!-- Seaweed -->
+              <rect x="6" y="30" width="2" height="8" fill="#01579B"/>
+              <rect x="58" y="28" width="2" height="10" fill="#01579B"/>
+              <!-- Fish -->
+              <rect x="36" y="16" width="6" height="3" fill="#FF8C2B"/>
+              <rect x="42" y="17" width="1" height="1" fill="#FF8C2B"/>
+              <rect x="38" y="17" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="34" y="17" width="2" height="1" fill="#FF8C2B"/>
+              <rect x="35" y="16" width="1" height="1" fill="#FF8C2B"/>
+              <rect x="35" y="18" width="1" height="1" fill="#FF8C2B"/>
+              <!-- Cat with bubble helmet -->
+              <rect x="20" y="20" width="6" height="6" fill="#FFFFFF" opacity="0.4"/>
+              <rect x="21" y="22" width="4" height="3" fill="#FFFFFF"/>
+              <rect x="21" y="21" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="24" y="21" width="1" height="1" fill="#FFFFFF"/>
+              <rect x="22" y="23" width="1" height="1" fill="#1A1A1A"/>
+              <rect x="23" y="23" width="1" height="1" fill="#1A1A1A"/>
+              <!-- Sea floor -->
+              <rect y="36" width="64" height="4" fill="#01579B"/>
+              <rect y="36" width="64" height="1" fill="#1A1A1A"/>
+            </svg>
+            <span class="screenshot-label">LVL 5</span>
+          </div>
+
+          <!-- Screenshot 6: Hub map -->
+          <div class="screenshot">
+            <svg viewBox="0 0 64 40" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+              <rect width="64" height="40" fill="#FFFFFF"/>
+              <!-- Snow texture -->
+              <rect x="4" y="6" width="2" height="2" fill="#E8F4FB"/>
+              <rect x="22" y="4" width="2" height="2" fill="#E8F4FB"/>
+              <rect x="50" y="8" width="3" height="2" fill="#E8F4FB"/>
+              <rect x="14" y="22" width="3" height="2" fill="#E8F4FB"/>
+              <rect x="44" y="28" width="2" height="2" fill="#E8F4FB"/>
+              <!-- Path nodes (level select) -->
+              <rect x="6" y="14" width="4" height="4" fill="#4FC3F7"/>
+              <rect x="6" y="13" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="6" y="18" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="5" y="14" width="1" height="4" fill="#1A1A1A"/>
+              <rect x="10" y="14" width="1" height="4" fill="#1A1A1A"/>
+              <!-- Path -->
+              <rect x="11" y="16" width="8" height="1" fill="#1A1A1A" opacity="0.4"/>
+              <rect x="11" y="17" width="8" height="1" fill="#1A1A1A" opacity="0.4"/>
+              <rect x="20" y="16" width="4" height="4" fill="#4FC3F7"/>
+              <rect x="20" y="15" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="20" y="20" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="19" y="16" width="1" height="4" fill="#1A1A1A"/>
+              <rect x="24" y="16" width="1" height="4" fill="#1A1A1A"/>
+              <rect x="25" y="18" width="8" height="1" fill="#1A1A1A" opacity="0.4"/>
+              <rect x="25" y="19" width="8" height="1" fill="#1A1A1A" opacity="0.4"/>
+              <rect x="34" y="20" width="4" height="4" fill="#FF8C2B"/>
+              <rect x="34" y="19" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="34" y="24" width="4" height="1" fill="#1A1A1A"/>
+              <rect x="33" y="20" width="1" height="4" fill="#1A1A1A"/>
+              <rect x="38" y="20" width="1" height="4" fill="#1A1A1A"/>
+              <!-- Star icon on first node (current) -->
+              <rect x="7" y="15" width="2" height="2" fill="#FFFFFF"/>
+              <!-- Lock icons -->
+              <rect x="35" y="21" width="2" height="2" fill="#1A1A1A"/>
+              <!-- Castle in distance -->
+              <rect x="48" y="14" width="10" height="14" fill="#1A1A1A"/>
+              <rect x="49" y="15" width="8" height="13" fill="#0288D1"/>
+              <rect x="50" y="20" width="2" height="3" fill="#1A1A1A"/>
+              <rect x="54" y="20" width="2" height="3" fill="#1A1A1A"/>
+              <rect x="52" y="24" width="2" height="4" fill="#1A1A1A"/>
+              <rect x="48" y="11" width="2" height="3" fill="#1A1A1A"/>
+              <rect x="54" y="11" width="2" height="3" fill="#1A1A1A"/>
+              <rect x="50" y="9" width="6" height="2" fill="#FF8C2B"/>
+              <!-- Ground line -->
+              <rect y="34" width="64" height="6" fill="#E8F4FB"/>
+              <rect y="34" width="64" height="1" fill="#1A1A1A"/>
+            </svg>
+            <span class="screenshot-label">MAP</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         DOWNLOAD
+    ════════════════════════════════════════ -->
+    <section id="download" class="download">
+      <div class="section-inner">
+        <h2 class="section-title" data-i18n="downloadTitle">DOWNLOAD NOW</h2>
+        <p data-i18n="downloadText">Free to play. No ads. Available on iOS and Android.</p>
+        <div class="download-buttons">
+          <a href="#" class="btn btn-blue btn-large play-sound">
+            <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" fill="white">
+              <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM6 3h1v1H6zm4 0h1v1h-1zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+            </svg>
+            <span class="btn-text-stack">
+              <small data-i18n="appStoreSmall">Download on</small>
+              <span>APP STORE</span>
+            </span>
+          </a>
+          <a href="#" class="btn btn-orange btn-large play-sound">
+            <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+            </svg>
+            <span class="btn-text-stack">
+              <small data-i18n="googlePlaySmall">Get it on</small>
+              <span>GOOGLE PLAY</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="qr-row">
+          <div class="qr-block">
+            <div class="qr-code">
+              <!-- Pixel QR placeholder -->
+              <svg viewBox="0 0 12 12" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect width="12" height="12" fill="#FFFFFF"/>
+                <rect x="0" y="0" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="1" y="1" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="0" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="10" y="1" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="0" y="9" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="1" y="10" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="0" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="6" y="0" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="5" y="2" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="7" y="2" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="0" y="4" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="2" y="4" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="4" y="4" width="2" height="2" fill="#1A1A1A"/>
+                <rect x="7" y="4" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="9" y="4" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="1" y="5" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="6" y="6" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="8" y="6" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="11" y="5" width="1" height="2" fill="#1A1A1A"/>
+                <rect x="3" y="7" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="5" y="7" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="9" y="7" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="4" y="8" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="7" y="8" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="11" y="8" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="5" y="9" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="9" y="9" width="2" height="2" fill="#1A1A1A"/>
+                <rect x="4" y="10" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="7" y="10" width="1" height="2" fill="#1A1A1A"/>
+                <rect x="5" y="11" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="9" y="11" width="3" height="1" fill="#1A1A1A"/>
+              </svg>
+            </div>
+            <span class="qr-label">iOS</span>
+          </div>
+          <div class="qr-block">
+            <div class="qr-code">
+              <svg viewBox="0 0 12 12" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect width="12" height="12" fill="#FFFFFF"/>
+                <rect x="0" y="0" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="1" y="1" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="0" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="10" y="1" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="0" y="9" width="3" height="3" fill="#1A1A1A"/>
+                <rect x="1" y="10" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="5" y="0" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="4" y="2" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="6" y="2" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="0" y="5" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="3" y="4" width="2" height="2" fill="#1A1A1A"/>
+                <rect x="7" y="4" width="1" height="2" fill="#1A1A1A"/>
+                <rect x="9" y="5" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="11" y="4" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="2" y="6" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="5" y="6" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="8" y="6" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="3" y="7" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="6" y="7" width="1" height="1" fill="#1A1A1A"/>
+                <rect x="10" y="7" width="1" height="2" fill="#1A1A1A"/>
+                <rect x="4" y="8" width="1" height="2" fill="#1A1A1A"/>
+                <rect x="6" y="8" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="5" y="9" width="2" height="2" fill="#1A1A1A"/>
+                <rect x="8" y="10" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="7" y="11" width="2" height="1" fill="#1A1A1A"/>
+                <rect x="10" y="11" width="2" height="1" fill="#1A1A1A"/>
+              </svg>
+            </div>
+            <span class="qr-label">Android</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <svg class="logo-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+              <rect width="16" height="16" fill="#0288D1"/>
+              <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+              <rect x="3" y="2" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="11" y="2" width="2" height="1" fill="#FFFFFF"/>
+              <rect x="3" y="6" width="10" height="6" fill="#FFFFFF"/>
+              <rect x="3" y="5" width="10" height="1" fill="#FFFFFF"/>
+              <rect x="5" y="8" width="2" height="2" fill="#1A1A1A"/>
+              <rect x="9" y="8" width="2" height="2" fill="#1A1A1A"/>
+              <rect x="6" y="8" width="1" height="1" fill="#4FC3F7"/>
+              <rect x="10" y="8" width="1" height="1" fill="#4FC3F7"/>
+              <rect x="7" y="10" width="2" height="1" fill="#FF8C2B"/>
+            </svg>
+            <span class="logo-text">SNOWY <span class="accent">CATS</span></span>
+          </a>
+          <p class="footer-tagline" data-i18n="footerTagline">8-bit platforming made with love.</p>
+
+          <div class="footer-buttons" style="margin-top: var(--pixel-3); display: flex; flex-direction: row; flex-wrap: wrap;">
+            <a href="#" class="btn btn-blue play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges" fill="white">
+                <path d="M8 1h1v1H8zM7 2h1v1H7zm2 0h1v1H9zM5 4h6v1H5zM4 5h8v1H4zM3 6h10v1H3zM2 7h12v1H2zM2 8h12v1H2zM2 9h12v1H2zM2 10h12v1H2zM3 11h2v1H3zm8 0h2v1h-2zM3 12h1v1H3zm9 0h1v1h-1z"/>
+              </svg>
+              APP STORE
+            </a>
+            <a href="#" class="btn btn-orange play-sound">
+              <svg class="btn-icon" viewBox="0 0 16 16" shape-rendering="crispEdges">
+                <path fill="#FFFFFF" d="M3 1h1v1H3zM3 2h2v1H3zM3 3h3v1H3zM3 4h4v1H3zM3 5h5v1H3zM3 6h6v1H3zM3 7h7v1H3zM3 8h7v1H3zM3 9h6v1H3zM3 10h5v1H3zM3 11h4v1H3zM3 12h3v1H3zM3 13h2v1H3zM3 14h1v1H3z"/>
+              </svg>
+              GOOGLE PLAY
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerLinksTitle">LINKS</h4>
+          <ul class="footer-links">
+            <li><a href="#" class="play-sound" data-i18n="footerPrivacy">Privacy Policy</a></li>
+            <li><a href="#" class="play-sound" data-i18n="footerTerms">Terms of Use</a></li>
+            <li><a href="#" class="play-sound" data-i18n="footerContacts">Contacts</a></li>
+            <li><a href="#about" class="play-sound" data-i18n="aboutTitle">About the game</a></li>
+            <li><a href="#features" class="play-sound" data-i18n="featuresTitle">Features</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 data-i18n="footerSocialTitle">FOLLOW US</h4>
+          <div class="social-icons">
+
+            <!-- YouTube -->
+            <a href="#" class="social-icon play-sound" aria-label="YouTube">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="4" width="12" height="8" fill="#FFFFFF"/>
+                <rect x="2" y="3" width="12" height="1" fill="#FFFFFF"/>
+                <rect x="2" y="12" width="12" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="6" width="1" height="4" fill="#FF8C2B"/>
+                <rect x="7" y="6" width="1" height="4" fill="#FF8C2B"/>
+                <rect x="8" y="7" width="1" height="2" fill="#FF8C2B"/>
+                <rect x="9" y="7" width="1" height="2" fill="#FF8C2B"/>
+              </svg>
+            </a>
+
+            <!-- Telegram -->
+            <a href="#" class="social-icon play-sound" aria-label="Telegram">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="6" width="10" height="1" fill="#FFFFFF"/>
+                <rect x="3" y="7" width="9" height="1" fill="#FFFFFF"/>
+                <rect x="4" y="8" width="7" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="9" width="3" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="10" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="11" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="9" y="9" width="2" height="3" fill="#FFFFFF"/>
+              </svg>
+            </a>
+
+            <!-- Facebook -->
+            <a href="#" class="social-icon play-sound" aria-label="Facebook">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="3" width="6" height="2" fill="#FFFFFF"/>
+                <rect x="6" y="5" width="2" height="9" fill="#FFFFFF"/>
+                <rect x="8" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="4" y="7" width="6" height="2" fill="#FFFFFF"/>
+              </svg>
+            </a>
+
+            <!-- X (Twitter) -->
+            <a href="#" class="social-icon play-sound" aria-label="X">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="3" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="5" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="5" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="7" y="7" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="5" y="9" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="9" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="3" y="11" width="2" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="11" width="2" height="2" fill="#FFFFFF"/>
+              </svg>
+            </a>
+
+            <!-- VK -->
+            <a href="#" class="social-icon play-sound" aria-label="VK">
+              <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="5" width="2" height="6" fill="#FFFFFF"/>
+                <rect x="4" y="11" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="9" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="6" y="6" width="1" height="3" fill="#FFFFFF"/>
+                <rect x="7" y="5" width="1" height="6" fill="#FFFFFF"/>
+                <rect x="8" y="5" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="10" y="5" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="9" y="7" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="10" y="9" width="1" height="2" fill="#FFFFFF"/>
+                <rect x="11" y="11" width="2" height="1" fill="#FFFFFF"/>
+                <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+                <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+                <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <span class="made-by" data-i18n="footerCopy">© 2026 SNOWY CATS — ALL RIGHTS RESERVED</span>
+        <span data-i18n="footerMadeWith">Made with ♥ and 256 colors</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sound toggle -->
+  <button class="sound-toggle" id="soundToggle" aria-label="Toggle sound">
+    <svg viewBox="0 0 16 16" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg" id="soundIcon">
+      <rect x="3" y="6" width="2" height="4" fill="#FFFFFF"/>
+      <rect x="5" y="5" width="1" height="6" fill="#FFFFFF"/>
+      <rect x="6" y="4" width="2" height="8" fill="#FFFFFF"/>
+      <rect x="10" y="6" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="10" y="9" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="11" y="7" width="1" height="2" fill="#FFFFFF"/>
+      <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+      <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+    </svg>
+  </button>
+
+  <script>
+    /* ════════════════════════════════════════
+       I18N TRANSLATIONS
+    ════════════════════════════════════════ */
+    const translations = {
+      en: {
+        appStoreSmall: "Download on",
+        googlePlaySmall: "Get it on",
+        heroTitle: "SNOWY CATS",
+        heroSubtitle: "A brave little cat. Endless snowy worlds. 100+ levels of pixel-perfect platforming adventure.",
+        aboutTitle: "ABOUT THE GAME",
+        aboutP1: "Meet SNOWY — a tiny cat with a big heart, lost in an endless winter world. Jump across icy platforms, dodge falling icicles, befriend forest spirits, and uncover the secret of the eternal snowfall.",
+        aboutP2: "Inspired by classic 8-bit platformers we grew up with, Snowy Cats blends crisp pixel graphics, hand-crafted level design and a chiptune soundtrack into one cozy adventure.",
+        aboutP3: "Built by two developers, one cat, and a whole lot of love. No microtransactions. No ads. Just pure platforming joy.",
+        featuresTitle: "FEATURES",
+        feature1Title: "100+ LEVELS",
+        feature1Desc: "Hand-crafted stages across six unique snowy biomes. From frozen forests to crystal caves.",
+        feature2Title: "CUTE PIXEL ART",
+        feature2Desc: "Every sprite drawn pixel by pixel. Crisp 16-bit aesthetics with modern animation polish.",
+        feature3Title: "CHIPTUNE OST",
+        feature3Desc: "Original soundtrack composed in authentic 8-bit. 18 tracks that get stuck in your head.",
+        feature4Title: "BOSS BATTLES",
+        feature4Desc: "Twelve unique boss fights. Each with custom mechanics. Each guarding a forgotten secret.",
+        feature5Title: "HIDDEN SECRETS",
+        feature5Desc: "Find 50+ hidden rooms, alternate paths, secret characters and unlockable cosmetics.",
+        feature6Title: "CROSS-PLATFORM",
+        feature6Desc: "Play on iOS and Android. Cloud saves sync your progress between all devices.",
+        screenshotsTitle: "SCREENSHOTS",
+        downloadTitle: "DOWNLOAD NOW",
+        downloadText: "Free to play. No ads. Available on iOS and Android.",
+        footerTagline: "8-bit platforming made with love.",
+        footerLinksTitle: "LINKS",
+        footerSocialTitle: "FOLLOW US",
+        footerPrivacy: "Privacy Policy",
+        footerTerms: "Terms of Use",
+        footerContacts: "Contacts",
+        footerCopy: "© 2026 SNOWY CATS — ALL RIGHTS RESERVED",
+        footerMadeWith: "Made with ♥ and 256 colors"
+      },
+      ru: {
+        appStoreSmall: "Загрузите в",
+        googlePlaySmall: "Доступно в",
+        heroTitle: "SNOWY CATS",
+        heroSubtitle: "Храбрый котик. Бесконечные снежные миры. 100+ уровней пиксельных приключений.",
+        aboutTitle: "ОБ ИГРЕ",
+        aboutP1: "Знакомьтесь — SNOWY, маленький котик с большим сердцем, потерявшийся в бескрайнем зимнем мире. Прыгайте по ледяным платформам, уворачивайтесь от падающих сосулек, дружите с лесными духами и раскройте тайну вечного снегопада.",
+        aboutP2: "Вдохновлённая классическими 8-битными платформерами, Snowy Cats объединяет чёткую пиксельную графику, тщательно проработанный левел-дизайн и чиптюн-саундтрек в одно уютное приключение.",
+        aboutP3: "Создано двумя разработчиками, одним котом и большой любовью. Без микротранзакций. Без рекламы. Только чистая радость платформера.",
+        featuresTitle: "ОСОБЕННОСТИ",
+        feature1Title: "100+ УРОВНЕЙ",
+        feature1Desc: "Уровни ручной работы в шести уникальных снежных биомах. От замёрзших лесов до кристальных пещер.",
+        feature2Title: "ПИКСЕЛЬ-АРТ",
+        feature2Desc: "Каждый спрайт нарисован попиксельно. Чёткая 16-битная эстетика и современная анимация.",
+        feature3Title: "ЧИПТЮН OST",
+        feature3Desc: "Оригинальный саундтрек в аутентичном 8-битном стиле. 18 треков, которые застрянут в голове.",
+        feature4Title: "БИТВЫ С БОССАМИ",
+        feature4Desc: "Двенадцать уникальных битв. Каждая со своей механикой. Каждая хранит забытую тайну.",
+        feature5Title: "СКРЫТЫЕ СЕКРЕТЫ",
+        feature5Desc: "Найдите 50+ скрытых комнат, альтернативных путей, секретных персонажей и косметики.",
+        feature6Title: "КРОССПЛАТФОРМА",
+        feature6Desc: "Играйте на iOS и Android. Облачные сохранения синхронизируют прогресс между устройствами.",
+        screenshotsTitle: "СКРИНШОТЫ",
+        downloadTitle: "СКАЧАТЬ",
+        downloadText: "Бесплатно. Без рекламы. Доступно для iOS и Android.",
+        footerTagline: "8-битный платформер, сделанный с любовью.",
+        footerLinksTitle: "ССЫЛКИ",
+        footerSocialTitle: "СОЦСЕТИ",
+        footerPrivacy: "Политика конфиденциальности",
+        footerTerms: "Условия использования",
+        footerContacts: "Контакты",
+        footerCopy: "© 2026 SNOWY CATS — ВСЕ ПРАВА ЗАЩИЩЕНЫ",
+        footerMadeWith: "Сделано с ♥ и 256 цветами"
+      }
+    };
+
+    function applyLang(lang) {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      try { localStorage.setItem('snowy-lang', lang); } catch(e) {}
+    }
+
+    let savedLang = 'en';
+    try {
+      savedLang = localStorage.getItem('snowy-lang') || 'en';
+    } catch(e) {}
+    applyLang(savedLang);
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+
+    /* ════════════════════════════════════════
+       8-BIT BEEP SOUND ON CLICK (Web Audio API)
+    ════════════════════════════════════════ */
+    let audioCtx = null;
+    let soundOn = true;
+    try {
+      const savedSound = localStorage.getItem('snowy-sound');
+      if (savedSound === 'off') soundOn = false;
+    } catch(e) {}
+
+    function ensureAudio() {
+      if (!audioCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) audioCtx = new AC();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function beep(freq = 880, duration = 0.06, type = 'square', vol = 0.08) {
+      if (!soundOn) return;
+      ensureAudio();
+      if (!audioCtx) return;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    // Two-tone "ui click" beep for buttons
+    function uiClick() {
+      if (!soundOn) return;
+      beep(1320, 0.04, 'square', 0.06);
+      setTimeout(() => beep(880, 0.05, 'square', 0.06), 35);
+    }
+
+    document.querySelectorAll('.play-sound').forEach(el => {
+      el.addEventListener('click', uiClick);
+      el.addEventListener('mouseenter', () => beep(1480, 0.02, 'square', 0.025));
+    });
+
+    // Sound toggle
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+
+    function updateSoundIcon() {
+      if (soundOn) {
+        soundToggle.classList.remove('muted');
+        soundIcon.innerHTML = `
+          <rect x="3" y="6" width="2" height="4" fill="#FFFFFF"/>
+          <rect x="5" y="5" width="1" height="6" fill="#FFFFFF"/>
+          <rect x="6" y="4" width="2" height="8" fill="#FFFFFF"/>
+          <rect x="10" y="6" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="10" y="9" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="11" y="7" width="1" height="2" fill="#FFFFFF"/>
+          <rect x="12" y="5" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="12" y="10" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="13" y="6" width="1" height="4" fill="#FFFFFF"/>
+        `;
+      } else {
+        soundToggle.classList.add('muted');
+        soundIcon.innerHTML = `
+          <rect x="3" y="6" width="2" height="4" fill="#FFFFFF"/>
+          <rect x="5" y="5" width="1" height="6" fill="#FFFFFF"/>
+          <rect x="6" y="4" width="2" height="8" fill="#FFFFFF"/>
+          <rect x="10" y="6" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="11" y="7" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="12" y="8" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="13" y="9" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="13" y="6" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="12" y="7" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="11" y="9" width="1" height="1" fill="#FFFFFF"/>
+          <rect x="10" y="10" width="1" height="1" fill="#FFFFFF"/>
+        `;
+      }
+    }
+    updateSoundIcon();
+
+    soundToggle.addEventListener('click', () => {
+      soundOn = !soundOn;
+      try { localStorage.setItem('snowy-sound', soundOn ? 'on' : 'off'); } catch(e) {}
+      updateSoundIcon();
+      if (soundOn) beep(1480, 0.05, 'square', 0.08);
+    });
+
+    /* ════════════════════════════════════════
+       PIXEL SNOWFLAKES
+    ════════════════════════════════════════ */
+    const snowContainer = document.getElementById('snowflakes');
+    const FLAKE_COUNT = window.innerWidth < 768 ? 30 : 60;
+
+    function spawnFlake() {
+      const flake = document.createElement('div');
+      const isBig = Math.random() > 0.7;
+      flake.className = isBig ? 'snowflake big' : 'snowflake';
+      const size = isBig ? 4 : (Math.random() > 0.5 ? 3 : 2);
+      flake.style.width = size + 'px';
+      flake.style.height = size + 'px';
+      flake.style.left = Math.random() * 100 + 'vw';
+      flake.style.animationDuration = (6 + Math.random() * 8) + 's';
+      flake.style.animationDelay = (-Math.random() * 10) + 's';
+      flake.style.opacity = 0.5 + Math.random() * 0.5;
+      snowContainer.appendChild(flake);
+    }
+
+    for (let i = 0; i < FLAKE_COUNT; i++) spawnFlake();
+
+    /* ════════════════════════════════════════
+       MOBILE HAMBURGER MENU
+    ════════════════════════════════════════ */
+    const hamburger = document.getElementById('hamburger');
+    const navActions = document.getElementById('navActions');
+    hamburger.addEventListener('click', () => {
+      navActions.classList.toggle('open');
+    });
+
+    // Close menu on link click (mobile)
+    navActions.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => navActions.classList.remove('open'));
+    });
+
+    // Resume audio on first user interaction (browser policy)
+    ['click', 'touchstart', 'keydown'].forEach(evt => {
+      document.addEventListener(evt, ensureAudio, { once: true });
+    });
+  </script>
+</body>
+</html>

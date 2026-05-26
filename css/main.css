@@ -254,7 +254,7 @@ p {
 ════════════════════════════════════════ */
 .header {
   position: sticky;
-  top: 0;
+  top: 32px;
   z-index: 100;
   background: var(--white);
   padding: var(--pixel-2) clamp(var(--pixel-3), 4vw, 32px);

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snowy Cats | Old Design</title>
+    <meta name="description" content="Snowy Cats is an exciting 2D pixel art mobile game with adorable cats and snowy mountains in the Endless Runner Platformer genre. Download for free!">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+    <!-- VERSION SWITCHER (временно) -->
+    <div style="position:sticky;top:0;z-index:9999;height:32px;background:#111;display:flex;justify-content:center;align-items:center;gap:6px;font-family:'Courier New',monospace;font-size:11px;border-bottom:1px solid #333;">
+        <span style="color:#555;margin-right:4px;">ДИЗАЙН:</span>
+        <a href="./" style="color:#FF8C2B;text-decoration:none;padding:2px 10px;border:1px solid #FF8C2B;">СТАРЫЙ ✓</a>
+        <a href="../" style="color:#aaa;text-decoration:none;padding:2px 10px;border:1px solid #444;">НОВЫЙ</a>
+        <a href="../original/" style="color:#aaa;text-decoration:none;padding:2px 10px;border:1px solid #444;">ОРИГИНАЛ</a>
+    </div>
+
+    <!-- Navigation Menu -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo-small">
+                <img src="../images/logo.png" alt="Logo" width="50" height="50">
+            </div>
+
+            <nav class="desktop-nav">
+                <ul>
+                    <li><a href="#about" data-i18n="nav.about">About</a></li>
+                    <li><a href="#features" data-i18n="nav.features">Features</a></li>
+                    <li><a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a></li>
+                    <li><a href="#download" data-i18n="nav.download">Download</a></li>
+                    <li class="language-switcher">
+                        <button class="language-button">EN ▼</button>
+                        <div class="language-dropdown pixel-border">
+                            <a href="#" class="active" data-lang="en">English</a>
+                            <a href="#" data-lang="ru">Русский</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="download-buttons">
+                <a href="#">
+                    <button class="pixel-button secondary">
+                        <span><img src="../images/app-store-ios-brands-solid-full.svg" alt="App Store"></span>
+                        <span>App Store</span>
+                    </button>
+                </a>
+                <a href="#">
+                    <button class="pixel-button">
+                        <span><img src="../images/google-play-brands-solid-full.svg" alt="Google Play"></span>
+                        <span>Google Play</span>
+                    </button>
+                </a>
+            </div>
+
+            <button class="mobile-menu-button">☰</button>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <ul>
+                    <li><a href="#about" data-i18n="nav.about">About</a></li>
+                    <li><a href="#features" data-i18n="nav.features">Features</a></li>
+                    <li><a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a></li>
+                    <li><a href="#download" data-i18n="nav.download">Download</a></li>
+                </ul>
+                <div class="mobile-language-switcher">
+                    <a href="#" class="active" data-lang="en">English</a>
+                    <a href="#" data-lang="ru">Русский</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <img src="../images/400x100.gif" alt="Snowy Cats" class="game-logo">
+                    <h1 data-i18n="hero.title">Snowy Cats</h1>
+                    <p class="tagline" data-i18n="hero.tagline">An exciting game with adorable pixel cats across snowy mountains in the genre of endless runner platformer!</p>
+                    <div class="hero-buttons">
+                        <a href="#">
+                            <button class="pixel-button secondary">
+                                <span><img src="../images/app-store-ios-brands-solid-full.svg" alt="App Store"></span>
+                                <span>App Store</span>
+                            </button>
+                        </a>
+                        <a href="#">
+                            <button class="pixel-button">
+                                <span><img src="../images/google-play-brands-solid-full.svg" alt="Google Play"></span>
+                                <span>Google Play</span>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="../images/500x400.gif" alt="Snowy Cats Preview" class="pixel-border" style="width: 100%;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="info-section" id="features">
+        <div class="container">
+            <h2 class="section-title" data-i18n="features.title">Game Features</h2>
+            <div class="features">
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon" style="margin-bottom: 10px">
+                        <img src="../images/catty.png" style="width: 90px;">
+                    </div>
+                    <h3 data-i18n="feature1.title">Adorable Cats</h3>
+                    <p data-i18n="feature1.desc">Collect over 30+ unique pixel cats with different abilities</p>
+                </div>
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon">
+                        <img src="../images/mount.png" style="width: 130px;">
+                    </div>
+                    <h3 data-i18n="feature2.title">Snowy Mountains</h3>
+                    <p data-i18n="feature2.desc">Explore beautiful pixel landscapes with dynamic day/night cycles</p>
+                </div>
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon">
+                        <img src="../images/controller.png" style="width: 90px;">
+                    </div>
+                    <h3 data-i18n="feature3.title">Engaging Gameplay</h3>
+                    <p data-i18n="feature3.desc">Overcome obstacles, collect coins to unlock more cats, increase your level</p>
+                </div>
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon" style="margin-bottom: 8px">
+                        <img src="../images/hat.png" style="width: 90px;">
+                    </div>
+                    <h3 data-i18n="feature4.title">Skins Shop</h3>
+                    <p data-i18n="feature4.desc">The ability to try on your cat over 50+ funny hats, snowboards and other effects</p>
+                </div>
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon"><img src=""></div>
+                    <h3 data-i18n="feature5.title">Coming soon..</h3>
+                    <p></p>
+                </div>
+                <div class="feature pixel-border rounded">
+                    <div class="feature-icon"><img src=""></div>
+                    <h3 data-i18n="feature5.title">Coming soon..</h3>
+                    <p></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section class="screenshots" id="screenshots">
+        <div class="container">
+            <h2 class="section-title" data-i18n="screenshots.title">Screenshots</h2>
+            <div class="screenshot-grid">
+                <img src="../images/screen_1.png" alt="Screenshot 1" class="screenshot pixel-border rounded">
+                <img src="../images/300x500.jpg" alt="Screenshot 2" class="screenshot pixel-border rounded">
+            </div>
+            <div class="screenshot-grid">
+                <img src="../images/300x500.jpg" alt="Screenshot 3" class="screenshot pixel-border rounded">
+                <img src="../images/300x500.jpg" alt="Screenshot 4" class="screenshot pixel-border rounded">
+            </div>
+        </div>
+    </section>
+
+    <!-- Development Section -->
+    <section class="dev-section">
+        <div class="container">
+            <h2 data-i18n="dev.title">Game in Development</h2>
+            <p data-i18n="dev.text">Snowy Cats is currently in active development. We're working hard to make the game as fun and engaging as possible. Coming soon to App Store and Google Play!</p>
+            <p class="social-title" data-i18n="dev.social">We also plan to help street animals! More about this and the game in social networks:</p>
+            <div class="social-icons">
+                <a href="#" class="social-icon pixel-border"><img src="../images/youtube.png" alt="YouTube" loading="lazy"></a>
+                <a href="#" class="social-icon pixel-border"><img src="../images/telegram.png" alt="Telegram" loading="lazy"></a>
+                <a href="#" class="social-icon pixel-border"><img src="../images/facebook.png" alt="Facebook" loading="lazy"></a>
+                <a href="#" class="social-icon pixel-border"><img src="../images/x.png" alt="X" loading="lazy"></a>
+                <a href="#" class="social-icon pixel-border"><img src="../images/vk.png" alt="VK" loading="lazy"></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section class="download-section" id="download">
+        <div class="container">
+            <h2 class="section-title" data-i18n="download.title">Download for free!</h2>
+            <p data-i18n="download.text" style="margin-bottom: 30px;">Available for iOS and Android</p>
+            <div class="hero-buttons other-buttons">
+                <a href="#">
+                    <button class="pixel-button secondary">
+                        <span><img src="../images/app-store-ios-brands-solid-full.svg" alt="App Store"></span>
+                        <span>App Store</span>
+                    </button>
+                </a>
+                <a href="#">
+                    <button class="pixel-button">
+                        <span><img src="../images/google-play-brands-solid-full.svg" alt="Google Play"></span>
+                        <span>Google Play</span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <img src="../images/logo.png" alt="Logo" width="80" height="80">
+            </div>
+            <div class="footer-links">
+                <a href="#about" data-i18n="nav.about">About</a>
+                <a href="#features" data-i18n="nav.features">Features</a>
+                <a href="#screenshots" data-i18n="nav.screenshots">Screenshots</a>
+                <a href="#download" data-i18n="nav.download">Download</a>
+                <a href="../html/privacypoliticy.html" data-i18n="footer.privacy">Privacy Policy</a>
+                <a href="#" data-i18n="footer.terms">Terms of Use</a>
+                <a href="#" data-i18n="footer.contacts">Contacts</a>
+            </div>
+            <div class="copyright" data-i18n="footer.copyright">© 2025 Red Pixels. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script src="js/script.js" defer></script>
+</body>
+</html>
